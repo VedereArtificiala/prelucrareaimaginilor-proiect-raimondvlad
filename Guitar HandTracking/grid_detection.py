@@ -8,16 +8,14 @@ from collections import defaultdict
 def string_detection(neck):
 
     height = len(neck.image)
-    width = len(neck.image)
-    neck_with_strings = np.zeros((height,width, 3), np.uint8)
-
+    width = len(neck.image[0])
+    neck_with_strings = np.zeros((height, width, 3), np.uint8)
     # Pasul 1: se detecteaza corzile folosing transformata Hough si se formeaza o imagine bazata pe asta
     edges = neck.edges_SobelY()
     edges = threshold(edges, 127)
 
-    lines = neck.hough_transform(edges, 50, 20) #To do: calibrearea automata a parametrilor
+    lines = neck.hough_transform(edges, 100, 10)   # To do: calibrearea automata a parametrilor
     size = len(lines)
-
     for x in range(size):
         for x1, y1, x2, y2 in lines[x]:
             cv2.line(neck_with_strings, (x1, y1), (x2, y2), (255, 255, 255), 2)
@@ -28,6 +26,7 @@ def string_detection(neck):
     # Pasul 2: se decupeaza imaginea pe sectiuni verticale la diferinte puncte si se calucleaza spatiile dintre corzi
     slices = {}
     nb_slices = int(width / 50)
+    print(nb_slices)
     for i in range(nb_slices):
         slices[(i + 1) * nb_slices] = []
 
@@ -60,10 +59,9 @@ def string_detection(neck):
                     points_dict[j].append((j, slices[j][index] + int(median_gap / 2)))
                 elif abs(diff / 2 - median_gap) < 4:
                     points_dict[j].append((j, slices[j][index] + int(median_gap / 2)))
-                    points_dict[j].append((j, slices[j][index] + int(3 * median_gap /2)))
+                    points_dict[j].append((j, slices[j][index] + int(3 * median_gap / 2)))
 
         points.extend(points_dict[j])
-
     '''for p in points:
         print(p)
         cv2.circle(neck.image, p, 3, (0, 255, 0), -1)
@@ -72,16 +70,14 @@ def string_detection(neck):
 
     points_divided = [[] for i in range(5)]
     for s in points_dict.keys():
-        for i in range(5):
+        for i in range(6):
             try:
-                # cv2.circle(neck.image, points_dict[s][i], 3, (255, 0, 0), -1)
+                cv2.circle(neck.image, points_dict[s][i], 3, (255, 0, 0), -1)
                 points_divided[i].append(points_dict[s][i])
             except IndexError:
                 pass
 
-
     # Pasul 3: Se formeaza linii care separe fiecare coarda in parte
-
     tuning = ["E", "A", "D", "G", "B", "E6"]
     strings = Strings(tuning)
 
@@ -98,6 +94,7 @@ def string_detection(neck):
 
     return strings, Image(img=neck.image)
 
+
 def fret_detection(neck):
 
     height = len(neck.image)
@@ -107,9 +104,9 @@ def fret_detection(neck):
     # 1. Detectam tastele cu transformata Hough
     edges = neck.edges_SobelX()
     edges = threshold(edges, 127)
-    #edges = cv2.medianBlur(edges, 3)
+    # edges = cv2.medianBlur(edges, 3)
 
-    lines = neck.hough_transform(edges, 20, 5) #To DO:Calibrarea parametrilor automata daca e posibila
+    lines = neck.hough_transform(edges, 20, 5)  # To DO:Calibrarea parametrilor automata daca e posibila
     size = len(lines)
 
     for x in range(size):
@@ -154,7 +151,6 @@ def fret_detection(neck):
         if nb > 1:
             potentialFrets.append(x)
 
-
     potentialFrets = list(sorted(potentialFrets))
     potentialFrets = remove_duplicate(potentialFrets)
 
@@ -162,7 +158,6 @@ def fret_detection(neck):
     potentialRatio = []
     for i in range(len(potentialFrets) - 1):
         potentialRatio.append(round(potentialFrets[i + 1] / potentialFrets[i], 3))
-
     ratio = potentialRatio[-1]
     lastX = potentialFrets[-1]
     while 1:
@@ -176,6 +171,7 @@ def fret_detection(neck):
         cv2.line(neck.image, (x, 0), (x, height), (127, 0, 255), 3)
 
     return Image(img=neck.image)
+
 
 if __name__ == "__main__":
     print("Pentru rezultate compila programul grid_detection_test.py")

@@ -8,10 +8,10 @@ from rotate_and_crop import rotate_picture, crop_image, resize
 
 i = 1
 plot.figure(1)
-for filename in os.listdir('./Test images/'):
+for filename in os.listdir('Test_images/'):
     print("Imaginea: " + filename + " - se proceseaza...")
     startTime = time.time()
-    chordImage = Image(path='./Test images/'+filename)
+    chordImage = Image(path='./Test_images/'+filename)
     resized = resize(chordImage.image)
     new = Image(img=resized)
     rotatedImage = rotate_picture(new)

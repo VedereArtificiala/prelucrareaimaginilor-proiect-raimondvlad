@@ -10,8 +10,12 @@ class Image:
             self.image = img
         else:
             print("Bad path or image")
-        self.gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
 
+        if self.image is not None:
+            self.gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
+        else:
+            self.gray = None
+            print("Image failed to load")
 
     def __str__(self):
         return self.image

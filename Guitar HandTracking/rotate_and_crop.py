@@ -17,9 +17,7 @@ def rotate_picture(image):
     for line in lines:
         for x1, y1, x2, y2 in line:
             slopes.append(abs((y2 - y1) / (x2 - x1)))
-
     median_slope = median(slopes)
-
     angle = median_slope
 
     return Image(img=rotate(imageToBeRotated, -angle))
@@ -53,7 +51,7 @@ def crop_image(image):
             if i > 3 and firstY == 0:
                 firstY = ySort[i]
 
-    return Image(img=imageToBeCroped[firstY - 10: lastY + 10])
+    return Image(img=imageToBeCroped[firstY: lastY])
 
 def resize(image):
 

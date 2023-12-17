@@ -70,12 +70,16 @@ def grid_detection_test():
         for string, points in strings.separatingLines.items():
             cv2.line(fret.image, points[0], points[1], (127, 0, 255), 2)
 
-        plot.subplot(int("42" + str(i)))
+        '''plot.subplot(int("42" + str(i)))
         i += 1
         plot.imshow(cv2.cvtColor(chordImage.image, cv2.COLOR_BGR2RGB))
         plot.subplot(int("42" + str(i)))
         i += 1
-        plot.imshow(cv2.cvtColor(fret.image, cv2.COLOR_BGR2RGB))
+        plot.imshow(cv2.cvtColor(fret.image, cv2.COLOR_BGR2RGB))'''
+        cv2.imshow("Original", chordImage.image)
+        cv2.imshow("Final", fret.image)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
         print("Gata - timp de prelucrare %s s" % round(time.time() - startTime, 2))
 
     plot.show()

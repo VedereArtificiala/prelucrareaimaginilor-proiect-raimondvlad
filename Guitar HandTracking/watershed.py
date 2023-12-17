@@ -46,6 +46,6 @@ def watershed_segmentation(image):
 
 
 if __name__ == "__main__":
-    chordImage = Image(path="Test_images/ChordImage.jpg")
+    chordImage = Image(path="Test_images/chordAm.png")
     rc = crop_image(rotate_picture(chordImage)).image
     watershed_segmentation(cv2.cvtColor(rc, cv2.COLOR_RGB2GRAY))

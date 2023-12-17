@@ -158,6 +158,7 @@ def fret_detection(neck):
     potentialRatio = []
     for i in range(len(potentialFrets) - 1):
         potentialRatio.append(round(potentialFrets[i + 1] / potentialFrets[i], 3))
+    print(potentialRatio)
     ratio = potentialRatio[-1]
     lastX = potentialFrets[-1]
     while 1:

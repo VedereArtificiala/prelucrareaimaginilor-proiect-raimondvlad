@@ -143,4 +143,4 @@ def refine_hand(neck, skin):
     return skin
 
 if __name__ == "__main__":
-    print("Pentru rezultate ruleaza fingers_detection.py")
+    print("Pentru rezultate ruleaza fingers_detection_test.py")

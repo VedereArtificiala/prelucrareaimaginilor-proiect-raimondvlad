@@ -54,6 +54,6 @@ class Image:
     def edges_SobelY(self, size=3):
         return cv2.Sobel(self.gray, cv2.CV_8U, 0, 1, size)
 
-    def hough_transform(self, edges, minLineLength, maxLineGap, threshold=15):
+    def hough_transform(self, edges, minLineLength, maxLineGap, threshold=10):
         lines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold, minLineLength, maxLineGap)
         return lines

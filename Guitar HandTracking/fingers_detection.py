@@ -3,20 +3,20 @@ import numpy as np
 from rotate_and_crop import *
 
 def skin_detection(image):
-
+    np.seterr(over='ignore')
     for indexLine, line in enumerate(image):
-        for indexPixel, pixel in enumerate(image):
-            if pixel[2] > 95 and pixel[1] > 40  and pixel[0] > 20 and max(pixel) - min(pixel) > 15 \
-                and abs(pixel[2] - pixel[1]) > 15 and pixel [2] > pixel [0] and pixel[2] > pixel[1] \
-                and indexPixel > len(line) / 2:
-
-                image[indexLine][indexPixel] = (255, 255, 255)
+        for indexPixel, pixel in enumerate(line):
+            if pixel[2] > 95 and pixel[1] > 40 and pixel[0] > 20 and max(pixel) - min(pixel) > 15 and abs(pixel[2] - pixel[1]) > 15 and pixel[2] > pixel[0] and pixel[2] > pixel[1] and indexPixel > len(line) / 2:
+                # image[indexLine][indexPixel] = (255, 255, 255)
+                pass
             else:
                 image[indexLine][indexPixel] = (0, 0, 0)
+
+    np.seterr(over='warn')
     return image
 
 def locate_hand(image):
-
+    global currentDensity
     height = len(image)
     width = len(image[0])
     handRegion = np.zeros((height, width, 3), np.uint8)
@@ -24,10 +24,12 @@ def locate_hand(image):
     xDict = defaultdict(int)
     for line in image:
         for j, pixel in enumerate(line):
-            if pixel.all() > 0:
+            if pixel.any() > 0:
 
                 xDict[j] += 1
 
+    if not xDict:
+        return handRegion
 
     maxDensity = max(xDict.values())
     maxXDensity = 0
@@ -82,12 +84,16 @@ def hand_detection(skin):
     neck.set_image(locate_hand(skin_detection(neck.image)))
     neck.set_image(cv2.medianBlur(neck.image, 5))
     neck.set_gray(cv2.cvtColor(neck.image, cv2.COLOR_BGR2GRAY))
-    cannyEdges = neck.edges_canny(minVal=70, maxVal=100, step=3)
+    cannyEdges = neck.edges_canny(minVal=70, maxVal=100)
 
     circles = cv2.HoughCircles(cannyEdges, cv2.HOUGH_GRADIENT, 1, 5,
                                param1=100, param2=20, minRadius=20, maxRadius=90)
+    if circles is None:
+        pass
+    else:
+        circles = np.uint16(np.around(circles))
 
-    circles = np.uint16(np.around(circles))
+
     for i in circles[0, :]:
 
         cv2.circle(neck.image, (i[0], i[1]), i[2], (0, 255, 0), 2)

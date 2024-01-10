@@ -18,6 +18,7 @@ def string_detection_test():
         rotatedImage = rotate_picture(chordImage)
         croppedImage = crop_image(rotatedImage)
         strings = string_detection(croppedImage)[1]
+
         '''plot.subplot(int("42" + str(i)))
         i += 1
         plot.imshow(cv2.cvtColor(chordImage.image, cv2.COLOR_BGR2RGB))

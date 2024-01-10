@@ -42,8 +42,8 @@ class Image:
         plt.show()
 
 
-    def edges_canny(self,minVal=100, maxVal=200, step=3):
-        return cv2.Canny(self.gray, minVal, maxVal, step)
+    def edges_canny(self,minVal=10, maxVal=150, apperture=3):
+        return cv2.Canny(self.gray, minVal, maxVal, apperture, L2gradient=True)
 
     def edges_LaPlace(self, size=3):
         return cv2.Laplacian(self.gray, cv2.CV_8U, size)

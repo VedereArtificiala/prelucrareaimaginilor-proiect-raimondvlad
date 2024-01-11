@@ -13,7 +13,9 @@ def string_detection(neck):
     # Pasul 1: se detecteaza corzile folosing transformata Hough si se formeaza o imagine bazata pe asta
     edges = neck.edges_SobelY()
     edges = threshold(edges, 120)
-
+    cv2.imshow("Edges", edges)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
     lines = neck.hough_transform(edges, 30, 10)   # To do: calibrearea automata a parametrilor
     size = len(lines)
     for x in range(size):
@@ -76,11 +78,11 @@ def string_detection(neck):
                 points_divided[i].append(points_dict[s][i])
             except IndexError:
                 pass
-    if len(points_divided) < 6:
+    '''if len(points_divided) < 6:
         last_line_points = points_divided[-1]
         x, y = last_line_points[0]
         y += 10
-        points_divided.append([(x, y)])
+        points_divided.append([(x, y)])'''
 
     '''angle_threshold = 5
 
@@ -95,7 +97,7 @@ def string_detection(neck):
     tuning = ["E", "A", "D", "G", "B", "E6"]
     strings = Strings(tuning)
 
-    for i in range(6):
+    for i in range(5):
         cnt = np.array(points_divided[i])
         [vx, vy, x, y] = cv2.fitLine(cnt, cv2.DIST_L12, 0, 0.01, 0.01)
 
@@ -119,6 +121,7 @@ def fret_detection(neck):
     edges = neck.edges_SobelX()
     edges = threshold(edges, 100)
     #edges = cv2.medianBlur(edges, 3)
+
 
     lines = neck.hough_transform(edges, 30, 10)  # To DO:Calibrarea parametrilor automata daca e posibila
     size = len(lines)

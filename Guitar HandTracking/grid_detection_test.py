@@ -17,7 +17,7 @@ def string_detection_test():
         chordImage = Image(path='Test_images/' + filename)
         rotatedImage = rotate_picture(chordImage)
         croppedImage = crop_image(rotatedImage)
-        strings = string_detection(croppedImage)[1]
+        strings = string_detection(croppedImage)[2]
 
         '''plot.subplot(int("42" + str(i)))
         i += 1
@@ -42,7 +42,7 @@ def fret_detection_test():
         chordImage = Image(path='Test_images/' + filename)
         rotatedImage = rotate_picture(chordImage)
         croppedImage = crop_image(rotatedImage)
-        fret = fret_detection(croppedImage)
+        fret = fret_detection(croppedImage)[1]
         '''plot.subplot(int("42" + str(i)))
         i += 1
         plot.imshow(cv2.cvtColor(chordImage.image, cv2.COLOR_BGR2RGB))
@@ -66,8 +66,8 @@ def grid_detection_test():
         chordImage = Image(path='Test_images/' + filename)
         rotatedImage = rotate_picture(chordImage)
         croppedImage = crop_image(rotatedImage)
-        strings = string_detection(croppedImage)[0]
-        fret = fret_detection(croppedImage)
+        strings = string_detection(croppedImage)[1]
+        fret = fret_detection(croppedImage)[1]
         for string, points in strings.separatingLines.items():
             cv2.line(fret.image, points[0], points[1], (127, 0, 255), 2)
 

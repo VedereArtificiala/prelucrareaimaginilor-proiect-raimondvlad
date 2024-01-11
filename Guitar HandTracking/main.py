@@ -16,11 +16,11 @@ def recognition(fingers, image):
     imgAux = Image(img=image)
     cropping = rotate_and_crop.crop_image(imgAux)
     rotated = rotate_and_crop.rotate_picture(cropping)
-    strings, points1, image = grid_detection.string_detection(rotated)
+    points1, string, image = grid_detection.string_detection(rotated)
     points2, image = grid_detection.fret_detection(rotated)
 
     # Em
-    if middle[0] <= points2[-1] and middle[1] >= points1[2]:
+    if middle[0] <= points2[1] and middle[1] >= points1[2]:
         if ring[1] <= middle[1] and middle[1] >= points1[3] or middle[1] >= points1[4]:
             print("Acordul Em sau Mi minor realizat")
     print("Gata")
@@ -73,7 +73,9 @@ while True:
     cv2.imshow("Image", img)
     if keyboard.is_pressed("space"):
         #cv2.imwrite("Test_images/output2.jpg", img)
-        recognition(fingerList, img)
         break
+
+
     # Keep the window open and update it for each frame; wait for 1 millisecond between frames
     cv2.waitKey(1)
+recognition(fingerList, img)

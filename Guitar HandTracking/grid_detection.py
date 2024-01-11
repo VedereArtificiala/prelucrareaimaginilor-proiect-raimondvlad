@@ -106,7 +106,7 @@ def string_detection(neck):
 
         cv2.line(neck.image, (width - 1, right_extreme), (0, left_extreme), (0, 0, 255), 2)
 
-    return strings, Image(img=neck.image)
+    return points_divided, strings, Image(img=neck.image)
 
 
 def fret_detection(neck):
@@ -180,7 +180,7 @@ def fret_detection(neck):
     for x in potentialFrets:
         cv2.line(neck.image, (x, 0), (x, height), (127, 0, 255), 2)
 
-    return Image(img=neck.image)
+    return potentialFrets, Image(img=neck.image)
 
 
 if __name__ == "__main__":
